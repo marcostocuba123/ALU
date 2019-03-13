@@ -1,0 +1,53 @@
+library IEEE; 
+use IEEE.std_logic_1164.all;
+use IEEE.numeric_std.all;
+use IEEE.std_logic_signed.all;  
+library ALTERA;
+use ALTERA.altera_primitives_components.all;
+
+
+entity COMPARADOR_CONBINATORIO is
+port(
+		AC									: in  std_logic_vector(7 downto 0);
+		BC		   	   	   		: in 	std_logic_vector(7 downto 0);
+		OUT_COMPARADOR					: out std_logic_vector(2 downto 0);
+		OUT_COMPARADOR_MULTIPLEXOR : out std_logic_vector(2 downto 0)
+	
+	);
+	end entity COMPARADOR_CONBINATORIO;     
+
+architecture COMPARADOR_CONBINATORIOArch of COMPARADOR_CONBINATORIO is
+
+		SIGNAL IGUAL: 						std_logic_vector(7 DOWNTO 0);
+		SIGNAL MAYOR_POS: 					std_logic_vector(7 DOWNTO 0);
+		SIGNAL MAYOR_AMBOS_POS_CRACK:	std_logic;
+ 
+		SIGNAL MAYOR_FIN:	std_logic;
+		SIGNAL IGUAL_FIN:	std_logic;
+		SIGNAL MENOR_FIN:	std_logic;
+
+Begin 
+	
+	IGUAL <= (AC xnor BC); 
+	IGUAL_FIN <= (IGUAL(0) and IGUAL(1) and IGUAL(2) and IGUAL(3) and IGUAL(4) and IGUAL(5) and IGUAL(6) and IGUAL(7));
+	
+	MAYOR_POS(6) 	<= (AC(6) AND not(BC(6)));
+	MAYOR_POS(5)	<= ((AC(6) XNOR (BC(6))) AND (AC(5) AND not(BC(5))));
+	MAYOR_POS(4)	<= ((AC(6) XNOR (BC(6))) AND (AC(5) XNOR (BC(5))) AND (AC(4) AND not(BC(4))));
+	MAYOR_POS(3)	<= ((AC(6) XNOR (BC(6))) AND (AC(5) XNOR (BC(5))) AND (AC(4) XNOR(BC(4))) AND (AC(3) AND not(BC(3))));
+	MAYOR_POS(2)	<= ((AC(6) XNOR (BC(6))) AND (AC(5) XNOR (BC(5))) AND (AC(4) XNOR(BC(4))) AND (AC(3) XNOR (BC(3))) AND(AC(2) AND not(BC(2))));
+	MAYOR_POS(1)	<= ((AC(6) XNOR (BC(6))) AND (AC(5) XNOR (BC(5))) AND (AC(4) XNOR(BC(4))) AND (AC(3) XNOR (BC(3))) AND(AC(2) XNOR(BC(2))) AND (AC(1) AND not(BC(1))));
+	MAYOR_POS(0)	<= ((AC(6) XNOR (BC(6))) AND (AC(5) XNOR (BC(5))) AND (AC(4) XNOR(BC(4))) AND (AC(3) XNOR (BC(3))) AND(AC(2) XNOR(BC(2))) AND (AC(1) XNOR(BC(1)))AND (AC(0) AND not(BC(0))));
+	
+	MAYOR_AMBOS_POS_CRACK <= MAYOR_POS(6) OR MAYOR_POS(5) OR MAYOR_POS(4) OR MAYOR_POS(3) OR MAYOR_POS(2) OR MAYOR_POS(1) OR MAYOR_POS(0);	
+	
+	MAYOR_FIN 	<= ( (BC(7)AND(NOT(AC(7)))) OR ((AC(7) AND (BC(7)) AND MAYOR_AMBOS_POS_CRACK)) OR (((NOT AC(7)) AND (NOT BC(7)) AND MAYOR_AMBOS_POS_CRACK)) );
+	
+	MENOR_FIN 	<= (NOT MAYOR_FIN) AND (NOT IGUAL_FIN); 
+	
+	OUT_COMPARADOR_MULTIPLEXOR(2) <= MAYOR_FIN;
+	OUT_COMPARADOR_MULTIPLEXOR(1) <= MENOR_FIN;
+	OUT_COMPARADOR_MULTIPLEXOR(0) <= IGUAL_FIN;
+	
+
+End COMPARADOR_CONBINATORIOArch;
