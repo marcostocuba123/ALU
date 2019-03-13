@@ -1,0 +1,42 @@
+library IEEE; 
+use IEEE.std_logic_1164.all;
+use IEEE.numeric_std.all;
+use IEEE.std_logic_unsigned.all;  
+library ALTERA;
+use ALTERA.altera_primitives_components.all;
+
+
+entity FULL_SUMADOR is
+port(
+		Sumando_A_FULL_SUMADOR					: in  std_logic;
+		Sumando_B_FULL_SUMADOR	         	: in 	std_logic;
+		CarryIn_FULL_SUMADOR						: in  std_logic;
+		Resultado_FULL_SUMADOR 					: out std_logic;
+		CarryOut_FULL_SUMADOR					: out std_logic
+	
+	);
+	end entity FULL_SUMADOR;     
+
+architecture FULL_SUMADORArch of FULL_SUMADOR is
+
+begin
+
+signal AUX1:  std_logic_vector(6 downto 0); 
+
+
+AUX1(0) 					<=  ((NOT Sumando_A_FULL_SUMADOR) 	AND 	(NOT Sumando_B_FULL_SUMADOR) 	AND 	(CarryIn_FULL_SUMADOR));
+AUX1(1) 					<=  ((NOT Sumando_A_FULL_SUMADOR) 	AND 	(Sumando_B_FULL_SUMADOR) 		AND 	(NOT CarryIn_FULL_SUMADOR));
+AUX1(2) 					<=  ((Sumando_A_FULL_SUMADOR) 		AND 	(NOT Sumando_B_FULL_SUMADOR) 	AND 	(NOT CarryIn_FULL_SUMADOR));
+
+AUX1(3) 					<=  ((Sumando_A_FULL_SUMADOR) 		AND 	(Sumando_B_FULL_SUMADOR) 		AND 	(CarryIn_FULL_SUMADOR));
+
+AUX1(4) 					<=  ((NOT Sumando_A_FULL_SUMADOR) 	AND 	(Sumando_B_FULL_SUMADOR) 		AND 	(CarryIn_FULL_SUMADOR));
+AUX1(5) 					<=  ((Sumando_A_FULL_SUMADOR) 		AND 	(Sumando_B_FULL_SUMADOR) 		AND 	(NOT CarryIn_FULL_SUMADOR));
+AUX1(6) 					<=  ((Sumando_A_FULL_SUMADOR) 		AND 	(NOT Sumando_B_FULL_SUMADOR) 	AND 	(CarryIn_FULL_SUMADOR));
+
+
+Resultado_FULL_SUMADOR 	<=  (AUX1(0) OR AUX1(1) OR AUX1(2) OR AUX1(3));
+CarryOut_FULL_SUMADOR  	<=  (AUX1(6) OR AUX1(5) OR AUX1(4) OR AUX1(3));
+
+
+
