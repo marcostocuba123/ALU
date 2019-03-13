@@ -1,0 +1,190 @@
+
+library IEEE; 
+use IEEE.numeric_std.all;
+use IEEE.STD_LOGIC_1164.ALL;	
+use IEEE.STD_LOGIC_ARITH.ALL;	 
+use IEEE.STD_LOGIC_UNSIGNED.ALL; 
+library ALTERA;
+use ALTERA.altera_primitives_components.all;
+
+
+entity ALU_BASE is
+port(
+
+		A 							: in	std_logic_vector(7 downto 0);
+		B 							: in	std_logic_vector(7 downto 0);
+		Operacion				: in	std_logic_vector(2 downto 0);
+		
+		Resultado 				: out	std_logic_vector(7 downto 0);
+		Resultado_Quartus 	: out	std_logic_vector(7 downto 0);
+		
+		Overflow					: out	std_logic;
+		Overflow_Quartus  	: out	std_logic;
+		
+		
+		Comparacion_Quartus 	: out	std_logic_vector(2 downto 0);
+		Comparacion_Combi 	: out	std_logic_vector(2 downto 0);
+		
+		Out_Multiplexor		: out	std_logic_vector(7 downto 0)
+		
+		);
+		
+	end entity ALU_BASE;     
+
+architecture ALU_BASEArch of ALU_BASE is
+
+signal FULL_SUMADOR0_TO_FULL_SUMADOR1:   	std_logic; 
+signal FULL_SUMADOR1_TO_FULL_SUMADOR2:   	std_logic;
+signal FULL_SUMADOR2_TO_FULL_SUMADOR3:   	std_logic;
+signal FULL_SUMADOR3_TO_FULL_SUMADOR4:   	std_logic;
+signal FULL_SUMADOR4_TO_FULL_SUMADOR5:   	std_logic;
+signal FULL_SUMADOR5_TO_FULL_SUMADOR6:   	std_logic;
+signal FULL_SUMADOR6_TO_FULL_SUMADOR7:   	std_logic;
+
+signal FULL_SUMADOR_TO_MULTIPLEXOR:   		std_logic_vector(7 downto 0);
+signal COMPARADOR_TO_MULTIPLEXOR:   		std_logic_vector(2 downto 0);
+signal OVERFLOW_TO_MULTIPLEXOR:           std_logic;  
+
+
+begin
+
+
+FULL_SUMADOR0 : ENTITY work.FULL_SUMADOR
+PORT MAP(
+
+		Sumando_A_FULL_SUMADOR		=> A(0),
+		Sumando_B_FULL_SUMADOR	  	=> B(0),     
+		CarryIn_FULL_SUMADOR			=>	Operacion(0),	
+		Suma_Resta						=> Operacion(0),
+		Resultado_FULL_SUMADOR 		=>	Resultado(0),
+		CarryOut_FULL_SUMADOR		=>	FULL_SUMADOR0_TO_FULL_SUMADOR1,
+		Resultado_A_MULTI				=> FULL_SUMADOR_TO_MULTIPLEXOR(0)
+);
+
+
+FULL_SUMADOR1 : ENTITY work.FULL_SUMADOR
+PORT MAP(
+
+		Sumando_A_FULL_SUMADOR		=> A(1),
+		Sumando_B_FULL_SUMADOR	  	=> B(1),     
+		CarryIn_FULL_SUMADOR			=>	FULL_SUMADOR0_TO_FULL_SUMADOR1,	
+		Suma_Resta						=> Operacion(0),
+		Resultado_FULL_SUMADOR 		=>	Resultado(1),
+		CarryOut_FULL_SUMADOR		=>	FULL_SUMADOR1_TO_FULL_SUMADOR2,
+		Resultado_A_MULTI				=> FULL_SUMADOR_TO_MULTIPLEXOR(1)		
+);
+
+FULL_SUMADOR2 : ENTITY work.FULL_SUMADOR
+PORT MAP(
+
+		Sumando_A_FULL_SUMADOR		=> A(2),
+		Sumando_B_FULL_SUMADOR	  	=> B(2),     
+		CarryIn_FULL_SUMADOR			=>	FULL_SUMADOR1_TO_FULL_SUMADOR2,
+		Suma_Resta						=> Operacion(0),	
+		Resultado_FULL_SUMADOR 		=>	Resultado(2),
+		CarryOut_FULL_SUMADOR		=>	FULL_SUMADOR2_TO_FULL_SUMADOR3,
+		Resultado_A_MULTI				=> FULL_SUMADOR_TO_MULTIPLEXOR(2)		
+);
+
+FULL_SUMADOR3 : ENTITY work.FULL_SUMADOR
+PORT MAP(
+
+		Sumando_A_FULL_SUMADOR		=> A(3),
+		Sumando_B_FULL_SUMADOR	  	=> B(3),     
+		CarryIn_FULL_SUMADOR			=>	FULL_SUMADOR2_TO_FULL_SUMADOR3,
+		Suma_Resta						=> Operacion(0),
+		Resultado_FULL_SUMADOR 		=>	Resultado(3),
+		CarryOut_FULL_SUMADOR		=>	FULL_SUMADOR3_TO_FULL_SUMADOR4,
+		Resultado_A_MULTI				=> FULL_SUMADOR_TO_MULTIPLEXOR(3)		
+);
+
+FULL_SUMADOR4 : ENTITY work.FULL_SUMADOR
+PORT MAP(
+
+		Sumando_A_FULL_SUMADOR		=> A(4),
+		Sumando_B_FULL_SUMADOR	  	=> B(4),     
+		CarryIn_FULL_SUMADOR			=>	FULL_SUMADOR3_TO_FULL_SUMADOR4,
+		Suma_Resta						=> Operacion(0),	
+		Resultado_FULL_SUMADOR 		=>	Resultado(4),
+		CarryOut_FULL_SUMADOR		=>	FULL_SUMADOR4_TO_FULL_SUMADOR5,
+		Resultado_A_MULTI				=> FULL_SUMADOR_TO_MULTIPLEXOR(4)		
+);
+
+FULL_SUMADOR5 : ENTITY work.FULL_SUMADOR
+PORT MAP(
+
+		Sumando_A_FULL_SUMADOR		=> A(5),
+		Sumando_B_FULL_SUMADOR	  	=> B(5),     
+		CarryIn_FULL_SUMADOR			=>	FULL_SUMADOR4_TO_FULL_SUMADOR5,
+		Suma_Resta						=> Operacion(0),	
+		Resultado_FULL_SUMADOR 		=>	Resultado(5),
+		CarryOut_FULL_SUMADOR		=>	FULL_SUMADOR5_TO_FULL_SUMADOR6,
+		Resultado_A_MULTI				=> FULL_SUMADOR_TO_MULTIPLEXOR(5)		
+);
+
+FULL_SUMADOR6 : ENTITY work.FULL_SUMADOR
+PORT MAP(
+
+		Sumando_A_FULL_SUMADOR		=> A(6),
+		Sumando_B_FULL_SUMADOR	  	=> B(6),     
+		CarryIn_FULL_SUMADOR			=>	FULL_SUMADOR5_TO_FULL_SUMADOR6,
+		Suma_Resta						=> Operacion(0),	
+		Resultado_FULL_SUMADOR 		=>	Resultado(6),
+		CarryOut_FULL_SUMADOR		=>	FULL_SUMADOR6_TO_FULL_SUMADOR7,
+		Resultado_A_MULTI				=> FULL_SUMADOR_TO_MULTIPLEXOR(6)		
+);
+
+FULL_SUMADOR7 : ENTITY work.FULL_SUMADOR
+PORT MAP(
+
+		Sumando_A_FULL_SUMADOR		=> A(7),
+		Sumando_B_FULL_SUMADOR	  	=> B(7),     
+		CarryIn_FULL_SUMADOR			=>	FULL_SUMADOR6_TO_FULL_SUMADOR7,
+		Suma_Resta						=> Operacion(0),
+		Resultado_FULL_SUMADOR 		=>	Resultado(7),
+		CarryOut_FULL_SUMADOR		=>	OVERFLOW_TO_MULTIPLEXOR,
+		Resultado_A_MULTI				=> FULL_SUMADOR_TO_MULTIPLEXOR(7)		
+);
+
+COMPARADORR : ENTITY work.COMPARADOR
+PORT MAP(
+
+		A_COMPARADOR					=>	A,
+		B_COMPARADOR	         	=>	B,
+		OUT_COMPARADOR					=>	Comparacion_Quartus
+		--OUT_COMPARADOR_MULTIPLEXOR => COMPARADOR_TO_MULTIPLEXOR
+);
+
+MULTIPLEXORR : ENTITY work.MULTIPLEXOR
+PORT MAP(
+
+		A_MULTIPLEXOR					=>	A,		
+		B_MULTIPLEXOR					=>	B,		
+		Resultado_MULTIPLEXOR		=> FULL_SUMADOR_TO_MULTIPLEXOR,		
+		Comparacion_MULTIPLEXOR	   => COMPARADOR_TO_MULTIPLEXOR,    	
+		Instruccion_MULTIPLEXOR		=> Operacion,
+		Salida_MULTIPLEXOR			=> Out_Multiplexor,
+		Overflow_MULTIPLEXOR_OUT   => Overflow,
+		Overflow_MULTIPLEXOR_IN    => OVERFLOW_TO_MULTIPLEXOR         
+);
+
+SUMAA : ENTITY work.SUMA 
+PORT MAP(
+
+		dataa								=>	A,		
+		datab								=>	B,		
+		Result_Q							=>	Resultado_Quartus,
+		Overflow_Q     				=> Overflow_Quartus,
+		OP_Code       					=> Operacion(0) 
+);
+
+COMPARADOR_CONBINATORIOO : ENTITY work.COMPARADOR_CONBINATORIO
+PORT MAP(
+
+		AC									=>	A,	
+		BC		   	   	   		=>	B,	
+		OUT_COMPARADOR					=>	Comparacion_Combi,	
+		OUT_COMPARADOR_MULTIPLEXOR =>	COMPARADOR_TO_MULTIPLEXOR
+);
+
+End Architecture ALU_BASEArch;
