@@ -1,0 +1,35 @@
+library IEEE; 
+use IEEE.std_logic_1164.all;
+use IEEE.numeric_std.all;
+use IEEE.std_logic_unsigned.all;  
+library ALTERA;
+use ALTERA.altera_primitives_components.all;
+
+
+entity COMPARADOR is
+port(
+		A_COMPARADOR					: in  std_logic_vector(7 downto 0);
+		B_COMPARADOR	         	: in 	std_logic_vector(7 downto 0);
+		OUT_COMPARADOR					: out std_logic_vector(2 downto 0)
+	
+	);
+	end entity COMPARADOR;     
+
+architecture COMPARADORArch of COMPARADOR is
+
+Begin 
+	
+	Process(A_COMPARADOR, B_COMPARADOR)
+	Begin
+	
+		If 	(A_COMPARADOR > B_COMPARADOR) then
+			OUT_COMPARADOR <= "100";
+		Elsif	(A_COMPARADOR < B_COMPARADOR) then
+			OUT_COMPARADOR <= "010";
+		Else
+			OUT_COMPARADOR <= "001";
+		End If;
+	
+	End Process;
+
+
