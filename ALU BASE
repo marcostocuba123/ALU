@@ -1,0 +1,64 @@
+--Definicion de las bibliotecas 
+library IEEE; 
+use IEEE.numeric_std.all;
+use IEEE.STD_LOGIC_1164.ALL;	
+use IEEE.STD_LOGIC_ARITH.ALL;	 
+use IEEE.STD_LOGIC_UNSIGNED.ALL; 
+library ALTERA;
+use ALTERA.altera_primitives_components.all;
+
+
+entity ALU is
+port(
+
+		
+		
+		);
+		
+	end entity ALU;     
+
+architecture ALUArch of ALU is
+
+signal BUS_MEMORIAS_SIGNAL:   	std_logic_vector(7 downto 0); 
+signal ROM_BUS_SIGNAL:   			std_logic_vector(7 downto 0);
+signal RAM_BUS_SIGNAL:   			std_logic_vector(7 downto 0);
+
+
+
+begin
+
+FULL_SUMADORR : ENTITY work.FULL_SUMADOR
+PORT MAP(
+
+		Lectura_Escritura_RAM  	=>LECTURA_ESCRITURA_SIGNAL,
+		Direccion_RAM			  	=>DIRECCION_SIGNAL           		
+);
+
+FULL_SUMADORR : ENTITY work.HALF_SUMADOR
+PORT MAP(
+
+		Lectura_Escritura_RAM  	=>LECTURA_ESCRITURA_SIGNAL,
+		Direccion_RAM			  	=>DIRECCION_SIGNAL           		
+);
+
+FULL_RESTADORR : ENTITY work.FULL_RESTADOR
+PORT MAP(
+          		
+);
+
+AND_BLOCKK : ENTITY work.AND_BLOCK
+PORT MAP(
+          		
+);
+
+OR_BLOCKK : ENTITY work.OR_BLOCK
+PORT MAP(
+         		
+);
+
+
+MULTIPLEXORR : ENTITY work.MULTIPLEXOR
+PORT MAP(
+          		
+);
+
